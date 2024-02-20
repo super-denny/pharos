@@ -40,11 +40,11 @@ Maven<br>
 #### 构建与运行
 1. 克隆项目到本地
 ```java
-git clone xxxxx
+git clone https://github.com/super-denny/pharos.git
 ```
 2. 进入项目目录
 ```java
-cd project-name
+cd pharos
 ```
 3. 使用Maven构建项目
 ```java
