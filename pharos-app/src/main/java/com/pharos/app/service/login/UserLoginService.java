@@ -6,7 +6,6 @@ import com.pharos.app.service.login.req.UserLoginReq;
 import com.pharos.app.service.login.vo.UserLoginVO;
 import com.pharos.common.encryption.MD5Util;
 import com.pharos.common.exception.BizException;
-import com.pharos.common.http.HttpUtil;
 import com.pharos.common.utils.RedisUtil;
 import com.pharos.domain.user.UserInfoGateway;
 import com.pharos.domain.user.dto.UserInfoDTO;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -30,7 +27,6 @@ import java.util.Objects;
  */
 @Service
 public class UserLoginService {
-    private static final String LDAP_LOGIN_URL = "http://cmdb-tx-api.webuyops.com/api/ldap_login";
 
     @Resource
     private RedisUtil redisUtil;
@@ -80,23 +76,8 @@ public class UserLoginService {
     }
 
     private UserLoginDTO doLogin(UserLoginReq userLoginReq) {
-        Map<String, String> map = new HashMap<>();
-        map.put("username", userLoginReq.getUsername());
-        map.put("password", userLoginReq.getPassword());
-        String result = HttpUtil.doPost(LDAP_LOGIN_URL, JSON.toJSONString(map), HttpUtil.JSON);
-        if (StringUtils.isBlank(result)) {
-            throw new BizException("登录失败，请稍后再试");
-        }
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        Integer code = jsonObject.getInteger("code");
-        if (code != 200) {
-            throw new BizException(jsonObject.getString("error_msg"));
-        }
-        UserLoginDTO userLoginDTO = JSON.toJavaObject(jsonObject.getJSONObject("user"), UserLoginDTO.class);
-        if (Objects.isNull(userLoginDTO)) {
-            throw new BizException("登录失败，请稍后再试");
-        }
-        return userLoginDTO;
+
+        return new UserLoginDTO();
     }
 
 

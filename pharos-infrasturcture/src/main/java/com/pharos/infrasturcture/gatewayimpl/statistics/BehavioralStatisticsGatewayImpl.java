@@ -48,6 +48,9 @@ public class BehavioralStatisticsGatewayImpl implements BehavioralStatisticsGate
         QueryWrapper<BehavioralStatistics> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("sum(scene_count) as sceneCount").eq("scene_value", sceneValue);
         BehavioralStatistics behavioralStatistics = behavioralStatisticsMapper.selectOne(queryWrapper);
+        if (Objects.isNull(behavioralStatistics)) {
+            return NumberUtils.LONG_ZERO;
+        }
         return behavioralStatistics.getSceneCount();
     }
 
