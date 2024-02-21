@@ -17,11 +17,19 @@ public class UserInfoDTO {
 
     private Integer id;
 
-    private String username;
+    private String account;
 
-    private String dispName;
+    private String nickname;
 
     private Integer status;
+
+    private String password;
+
+    private String salt;
+
+    private Integer encryptTimes;
+
+    private Integer deleteTag;
 
     private Date gmtLastLogin;
 

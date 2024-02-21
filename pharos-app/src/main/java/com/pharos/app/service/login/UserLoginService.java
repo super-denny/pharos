@@ -6,6 +6,7 @@ import com.pharos.app.service.login.req.UserLoginReq;
 import com.pharos.app.service.login.vo.UserLoginVO;
 import com.pharos.common.encryption.MD5Util;
 import com.pharos.common.exception.BizException;
+import com.pharos.common.utils.OrikaMapperUtils;
 import com.pharos.common.utils.RedisUtil;
 import com.pharos.domain.user.UserInfoGateway;
 import com.pharos.domain.user.dto.UserInfoDTO;
@@ -36,24 +37,9 @@ public class UserLoginService {
 
     public UserLoginVO login(UserLoginReq userLoginReq) {
         UserInfoDTO userInfoDTO = this.checkStatus(userLoginReq);
-        UserLoginDTO userLoginDTO = this.doLogin(userLoginReq);
-        this.userInfoHandle(userInfoDTO, userLoginDTO);
+        UserLoginDTO userLoginDTO = this.doLogin(userInfoDTO, userLoginReq);
         String token = this.generateToken(userLoginDTO);
-        return UserLoginVO.builder().username(userLoginDTO.getUsername()).chineseName(userLoginDTO.getDispName()).token(token).build();
-    }
-
-    private void userInfoHandle(UserInfoDTO userInfoDTO, UserLoginDTO userLoginDTO) {
-        if (Objects.nonNull(userInfoDTO)) {
-            userInfoDTO.setGmtLastLogin(new Date());
-            userLoginDTO.setId(String.valueOf(userInfoDTO.getId()));
-            userInfoGateway.update(userInfoDTO);
-        } else {
-            UserInfoDTO infoDTO = new UserInfoDTO();
-            infoDTO.setUsername(userLoginDTO.getUsername());
-            infoDTO.setDispName(userLoginDTO.getDispName());
-            userInfoGateway.reg(infoDTO);
-            userLoginDTO.setId(String.valueOf(infoDTO.getId()));
-        }
+        return UserLoginVO.builder().account(userLoginDTO.getAccount()).nickname(userLoginDTO.getNickname()).token(token).build();
     }
 
     private String generateToken(UserLoginDTO userLoginDTO) {
@@ -75,9 +61,12 @@ public class UserLoginService {
         return userInfoDTO;
     }
 
-    private UserLoginDTO doLogin(UserLoginReq userLoginReq) {
-
-        return new UserLoginDTO();
+    private UserLoginDTO doLogin(UserInfoDTO userInfoDTO, UserLoginReq userLoginReq) {
+        String pwd = MD5Util.pwdEncrypt(userLoginReq.getPassword(), userInfoDTO.getSalt(), userInfoDTO.getEncryptTimes());
+        if (Objects.equals(pwd, userInfoDTO.getPassword())) {
+            return OrikaMapperUtils.map(userInfoDTO, UserLoginDTO.class);
+        }
+        throw new BizException("密码错误！！！");
     }
 
 

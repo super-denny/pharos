@@ -12,9 +12,9 @@ import lombok.Data;
 @Data
 public class UserInfoAdminReq extends BaseQuery {
 
-    private String username;
+    private String nickname;
 
-    private String dispName;
+    private String account;
 
     private Integer id;
 

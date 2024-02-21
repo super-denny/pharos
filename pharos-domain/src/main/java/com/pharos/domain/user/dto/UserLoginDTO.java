@@ -10,15 +10,7 @@ import lombok.Data;
  */
 @Data
 public class UserLoginDTO {
-    private String dispName;
-    private String email;
-    private String id;
-    private Boolean isActive;
-    private Boolean isBoss;
-    private Boolean isLeader;
-    private String mobile;
-    private String position;
-    private String userType;
-    private String username;
-    private String wxId;
+    private Integer id;
+    private String account;
+    private String nickname;
 }

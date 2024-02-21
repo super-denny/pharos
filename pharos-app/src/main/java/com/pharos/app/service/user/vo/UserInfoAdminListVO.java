@@ -14,9 +14,9 @@ import java.util.Date;
 public class UserInfoAdminListVO {
     private Integer id;
 
-    private String username;
+    private String account;
 
-    private String dispName;
+    private String nickname;
 
     private Integer status;
 

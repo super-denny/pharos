@@ -1,5 +1,6 @@
 package com.pharos.app.service.link;
 
+import cn.hutool.core.date.DateUtil;
 import com.pharos.app.service.link.req.LinkSubmitReq;
 import com.pharos.app.service.link.vo.LinkSubmitListVO;
 import com.pharos.common.email.MailUtil;
@@ -12,8 +13,8 @@ import com.pharos.domain.link.enums.LinkPrivacyEnum;
 import com.pharos.domain.user.UserInfoGateway;
 import com.pharos.domain.user.dto.UserInfoDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +35,9 @@ import java.util.concurrent.Executor;
 @Slf4j
 @Service
 public class LinkInfoService {
+
+    @Value("${email.recipient}")
+    private String emailRecipient;
 
     @Resource
     private LinkInfoGateway linkInfoGateway;
@@ -58,7 +62,7 @@ public class LinkInfoService {
             String content = "<html>\n" +
                     "<body>\n" +
                     "  <h3>链接提报审核</h3>\n" +
-                    "  <span>提报人：" + userInfoDTO.getDispName() + "</span>\n" +
+                    "  <span>提报人：" + userInfoDTO.getNickname() + "</span>\n" +
                     "  </br>\n" +
                     "  <span>标题：" + linkInfoDTO.getTitle() + "</span>\n" +
                     "  </br>\n" +
@@ -68,12 +72,12 @@ public class LinkInfoService {
                     "  </br>\n" +
                     "  <span>链接：" + linkInfoDTO.getUrl() + "</span>\n" +
                     "  </br>\n" +
-                    "  <span>提报时间：" + new Date() + "</span>\n" +
+                    "  <span>提报时间：" + DateUtil.formatDateTime(new Date()) + "</span>\n" +
                     "<body>\n" +
                     "</html>";
             CompletableFuture.runAsync(() -> {
                 try {
-                    mailUtil.sendHtmlMail("wcj5299@qq.com", userInfoDTO.getDispName() + "提报了一个链接，请查看", content);
+                    mailUtil.sendHtmlMail(emailRecipient, userInfoDTO.getNickname() + "提报了一个链接，请查看", content);
                 } catch (MessagingException e) {
                     throw new RuntimeException(e);
                 }

@@ -17,9 +17,9 @@ public class UserLoginVO {
 
     private String token;
 
-    private String username;
+    private String account;
 
-    private String chineseName;
+    private String nickname;
 
     private String avatar;
 }

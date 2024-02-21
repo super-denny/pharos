@@ -60,7 +60,7 @@ public class LinkInfoAdminService {
         Map<Integer, UserInfoDTO> userInfoMap = userInfoDTOList.stream().collect(Collectors.toMap(UserInfoDTO::getId, x -> x, (a, b) -> b));
         result.getList().forEach(x -> {
             UserInfoDTO userInfoDTO = userInfoMap.get(x.getUserId());
-            x.setUserName(Objects.isNull(userInfoDTO) ? "" : userInfoDTO.getDispName());
+            x.setUserName(Objects.isNull(userInfoDTO) ? "" : userInfoDTO.getNickname());
         });
         return result;
     }
