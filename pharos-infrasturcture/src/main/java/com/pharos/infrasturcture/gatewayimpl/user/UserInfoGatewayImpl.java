@@ -30,9 +30,9 @@ public class UserInfoGatewayImpl implements UserInfoGateway {
 
 
     @Override
-    public UserInfoDTO getByUsername(String username) {
+    public UserInfoDTO getByAccount(String account) {
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", username).eq("delete_tag", DeleteTagEnum.NORMAL.getStatus());
+        queryWrapper.eq("account", account).eq("delete_tag", DeleteTagEnum.NORMAL.getStatus());
         UserInfo userInfo = userInfoMapper.selectOne(queryWrapper);
         return OrikaMapperUtils.map(userInfo, UserInfoDTO.class);
     }

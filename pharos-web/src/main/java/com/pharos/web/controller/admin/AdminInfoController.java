@@ -48,6 +48,12 @@ public class AdminInfoController extends BaseController {
         return new Response<Void>().success();
     }
 
+    @PostMapping("/updatePwd")
+    public Response<Void> updatePwd(@RequestBody AdminUpdateReq adminUpdateReq) {
+        adminInfoService.updatePwd(adminUpdateReq, getLoginAdminId());
+        return new Response<Void>().success();
+    }
+
     @GetMapping("/detail")
     public Response<AdminDetailVO> detail(@RequestParam("id") Integer id) {
         AdminDetailVO detailVO = adminInfoService.detail(id);

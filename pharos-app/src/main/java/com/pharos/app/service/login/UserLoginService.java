@@ -17,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -50,7 +49,7 @@ public class UserLoginService {
     }
 
     private UserInfoDTO checkStatus(UserLoginReq userLoginReq) {
-        UserInfoDTO userInfoDTO = userInfoGateway.getByUsername(userLoginReq.getUsername());
+        UserInfoDTO userInfoDTO = userInfoGateway.getByAccount(userLoginReq.getAccount());
         if (Objects.isNull(userInfoDTO)) {
             throw new BizException("账号不存在！");
         }

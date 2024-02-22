@@ -1,7 +1,6 @@
 package com.pharos.domain.user;
 
 import com.github.pagehelper.PageInfo;
-import com.pharos.domain.link.dto.LinkInfoDTO;
 import com.pharos.domain.user.dto.UserInfoDTO;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
  */
 public interface UserInfoGateway {
 
-    UserInfoDTO getByUsername(String username);
+    UserInfoDTO getByAccount(String account);
 
     void reg(UserInfoDTO userInfoDTO);
 

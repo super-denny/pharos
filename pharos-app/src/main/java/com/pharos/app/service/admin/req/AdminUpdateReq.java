@@ -26,4 +26,6 @@ public class AdminUpdateReq {
 
     @NotNull(message = "请选择管理员类型")
     private Integer type;
+
+    private String password;
 }

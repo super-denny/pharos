@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class UserLoginReq {
 
     @NotBlank(message = "请输入账号")
-    private String username;
+    private String account;
 
     @NotBlank(message = "请输入密码")
     private String password;

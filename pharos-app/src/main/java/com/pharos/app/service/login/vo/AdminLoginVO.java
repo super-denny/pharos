@@ -1,6 +1,5 @@
 package com.pharos.app.service.login.vo;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
@@ -25,4 +24,6 @@ public class AdminLoginVO {
     private Date gmtCreate;
 
     private Date gmtModify;
+
+    private Integer type;
 }

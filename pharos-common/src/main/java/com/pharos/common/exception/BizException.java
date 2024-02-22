@@ -11,7 +11,7 @@ public class BizException extends BaseException {
     }
 
     public BizException(String msg) {
-        super(BaseCode.SYSTEM_FAILD.getCode(), msg);
+        super(BaseCode.SYSTEM_FAILED.getCode(), msg);
     }
 
     public BizException(Code code, Throwable e) {

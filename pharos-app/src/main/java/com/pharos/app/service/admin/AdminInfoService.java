@@ -8,9 +8,11 @@ import com.pharos.common.encryption.MD5Util;
 import com.pharos.common.encryption.SaltUtil;
 import com.pharos.common.enums.DeleteTagEnum;
 import com.pharos.common.exception.BizException;
+import com.pharos.common.response.BaseCode;
 import com.pharos.common.utils.OrikaMapperUtils;
 import com.pharos.domain.admin.AdminInfoGateway;
 import com.pharos.domain.admin.dto.AdminInfoDTO;
+import com.pharos.domain.admin.enums.AdminTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +77,32 @@ public class AdminInfoService {
         AdminInfoDTO adminInfoDTO = new AdminInfoDTO();
         adminInfoDTO.setId(id);
         adminInfoDTO.setDeleteTag(DeleteTagEnum.DELETED.getStatus());
+        adminInfoGateway.update(adminInfoDTO);
+    }
+
+    public void updatePwd(AdminUpdateReq req, Integer adminId) {
+        if (Objects.isNull(req.getId())) {
+            throw new BizException(BaseCode.PARAM_ERROR);
+        }
+        String password = req.getPassword();
+        if (StringUtils.isBlank(password)) {
+            throw new BizException(BaseCode.PARAM_ERROR);
+        }
+        AdminInfoDTO detail = adminInfoGateway.detail(adminId);
+        if (Objects.isNull(detail)) {
+            throw new BizException(BaseCode.PARAM_ERROR);
+        }
+        Integer type = detail.getType();
+        if (Objects.equals(type, AdminTypeEnum.NORMAL.getType())) {
+            throw new BizException(BaseCode.NOT_AUTHORITY);
+        }
+        AdminInfoDTO adminInfoDTO = new AdminInfoDTO();
+        adminInfoDTO.setId(req.getId());
+        String salt = SaltUtil.generateSalt();
+        int encryptTimes = SaltUtil.getEncryptTimes();
+        adminInfoDTO.setSalt(salt);
+        adminInfoDTO.setEncryptTimes(encryptTimes);
+        adminInfoDTO.setPassword(MD5Util.pwdEncrypt(password, salt, encryptTimes));
         adminInfoGateway.update(adminInfoDTO);
     }
 }
