@@ -10,9 +10,9 @@ import com.pharos.common.enums.DeleteTagEnum;
 import com.pharos.common.exception.BizException;
 import com.pharos.common.response.BaseCode;
 import com.pharos.common.utils.OrikaMapperUtils;
-import com.pharos.domain.link.dto.LinkInfoDTO;
 import com.pharos.domain.user.UserInfoGateway;
 import com.pharos.domain.user.dto.UserInfoDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,6 +29,8 @@ public class UserInfoAdminService {
 
     @Resource
     private UserInfoGateway userInfoGateway;
+
+    private static final String DEFAULT_PSW = "user123456";
 
 
     public PageInfo<UserInfoDTO> list(UserInfoAdminReq userInfoAdminReq) {
@@ -57,17 +59,25 @@ public class UserInfoAdminService {
         if (Objects.isNull(infoDTO)) {
             throw new BizException(BaseCode.DATA_NOT_EXIST);
         }
-        infoDTO.setNickname(req.getNickname());
-        if (!Objects.equals(MD5Util.pwdEncrypt(req.getPassword(), infoDTO.getSalt(), infoDTO.getEncryptTimes()), infoDTO.getPassword())) {
-            this.setPassword(req, infoDTO);
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.setId(req.getId());
+        if (StringUtils.isNotBlank(req.getNickname())) {
+            userInfoDTO.setNickname(req.getNickname());
         }
-        userInfoGateway.update(infoDTO);
+        if (StringUtils.isNotBlank(req.getPassword())) {
+            String salt = SaltUtil.generateSalt();
+            int encryptTimes = SaltUtil.getEncryptTimes();
+            userInfoDTO.setPassword(MD5Util.pwdEncrypt(req.getPassword(), salt, encryptTimes));
+            userInfoDTO.setSalt(salt);
+            userInfoDTO.setEncryptTimes(encryptTimes);
+        }
+        userInfoGateway.update(userInfoDTO);
     }
 
-    private void setPassword(UserInfoAdminUpdateReq req, UserInfoDTO infoDTO) {
+    private void setPassword(UserInfoDTO infoDTO) {
         String salt = SaltUtil.generateSalt();
         int encryptTimes = SaltUtil.getEncryptTimes();
-        infoDTO.setPassword(MD5Util.pwdEncrypt(req.getPassword(), salt, encryptTimes));
+        infoDTO.setPassword(MD5Util.pwdEncrypt(DEFAULT_PSW, salt, encryptTimes));
         infoDTO.setSalt(salt);
         infoDTO.setEncryptTimes(encryptTimes);
     }
@@ -76,7 +86,7 @@ public class UserInfoAdminService {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         userInfoDTO.setAccount(req.getAccount());
         userInfoDTO.setNickname(req.getNickname());
-        this.setPassword(req, userInfoDTO);
+        this.setPassword(userInfoDTO);
         userInfoGateway.reg(userInfoDTO);
     }
 
@@ -93,5 +103,12 @@ public class UserInfoAdminService {
     public UserInfoAdminListVO detail(Integer id) {
         UserInfoDTO infoDTO = userInfoGateway.getByUserId(id);
         return OrikaMapperUtils.map(infoDTO, UserInfoAdminListVO.class);
+    }
+
+    public void updatePwd(UserInfoAdminUpdateReq req) {
+        if (Objects.isNull(req.getId())) {
+            throw new BizException(BaseCode.PARAM_ERROR);
+        }
+        this.modify(req);
     }
 }

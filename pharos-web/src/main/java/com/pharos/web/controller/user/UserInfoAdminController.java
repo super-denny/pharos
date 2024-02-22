@@ -32,6 +32,12 @@ public class UserInfoAdminController {
         return new Response<Void>().success();
     }
 
+    @PostMapping("/updatePwd")
+    public Response<Void> updatePwd(@RequestBody UserInfoAdminUpdateReq userInfoAdminUpdateReq) {
+        userInfoAdminService.updatePwd(userInfoAdminUpdateReq);
+        return new Response<Void>().success();
+    }
+
     @PostMapping("/list")
     public Response<PageInfo<UserInfoAdminListVO>> list(@RequestBody UserInfoAdminReq userInfoAdminReq) {
         PageInfo<UserInfoDTO> list = userInfoAdminService.list(userInfoAdminReq);
