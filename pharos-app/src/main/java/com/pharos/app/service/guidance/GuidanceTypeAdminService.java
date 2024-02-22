@@ -8,11 +8,11 @@ import com.pharos.common.enums.DeleteTagEnum;
 import com.pharos.common.exception.BizException;
 import com.pharos.common.response.BaseCode;
 import com.pharos.common.utils.OrikaMapperUtils;
-import com.pharos.domain.admin.dto.AdminInfoDTO;
+import com.pharos.common.utils.RedisUtil;
 import com.pharos.domain.guidance.GuidanceGateway;
 import com.pharos.domain.guidance.GuidanceTypeGateway;
+import com.pharos.domain.guidance.constant.GuidanceTypeRedisKey;
 import com.pharos.domain.guidance.dto.GuidanceTypeDTO;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +34,9 @@ public class GuidanceTypeAdminService {
     @Resource
     private GuidanceGateway guidanceGateway;
 
+    @Resource
+    private RedisUtil redisUtil;
+
     public PageInfo<GuidanceTypeDTO> list(GuidanceTypeAdminReq guidanceTypeAdminReq) {
         GuidanceTypeDTO guidanceTypeDTO = OrikaMapperUtils.map(guidanceTypeAdminReq, GuidanceTypeDTO.class);
         return guidanceTypeGateway.pageList(guidanceTypeDTO);
@@ -47,6 +50,7 @@ public class GuidanceTypeAdminService {
         } else {
             guidanceTypeGateway.insert(guidanceTypeDTO);
         }
+        redisUtil.remove(GuidanceTypeRedisKey.ALL_LIST);
     }
 
     public void delete(Integer id) {
@@ -61,6 +65,7 @@ public class GuidanceTypeAdminService {
         guidanceTypeDTO.setId(id);
         guidanceTypeDTO.setDeleteTag(DeleteTagEnum.DELETED.getStatus());
         guidanceTypeGateway.update(guidanceTypeDTO);
+        redisUtil.remove(GuidanceTypeRedisKey.ALL_LIST);
     }
 
     public GuidanceTypeDTO detail(Integer id) {
