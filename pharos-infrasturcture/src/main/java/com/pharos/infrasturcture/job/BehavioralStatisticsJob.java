@@ -34,7 +34,7 @@ public class BehavioralStatisticsJob {
 
     @Scheduled(cron = "0 0/1 * * * ?")
     public void dataReflow() {
-        log.info("统计数据回流任务正在刷新数据....");
+//        log.info("统计数据回流任务正在刷新数据....");
         String dateStr = DateUtil.format(new Date(), "yyyy-MM-dd");
         String websiteAccessKey = String.format(BehavioralStatisticsRedisKey.WEBSITE_ACCESS_KEY, BehavioralStatisticsSceneEnum.WEBSITE_ACCESS.getValue(), dateStr);
         String websiteAccessCountStr = redisUtil.get(websiteAccessKey);
@@ -51,6 +51,6 @@ public class BehavioralStatisticsJob {
                 behavioralStatisticsGateway.update(statisticsDTO);
             }
         }
-        log.info("统计数据回流任务正在数据刷新完毕！！！");
+//        log.info("统计数据回流任务正在数据刷新完毕！！！");
     }
 }
