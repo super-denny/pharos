@@ -30,6 +30,11 @@ Maven<br>
 &nbsp;&nbsp;&nbsp;&nbsp;--配置文件<br>
 &nbsp;&nbsp;&nbsp;&nbsp;--http入口
 
+### 链接
+<h3><p style="color:red;">“灯塔导航”项目:https://github.com/super-denny/pharos-web</p></h3>
+<h3><p style="color:red;">“灯塔导航管理系统”项目:https://github.com/super-denny/pharos-admin</p></h3>
+
+
 ### 如何运行
 #### 环境准备
 在运行本项目之前，请确保您的开发环境中安装了以下软件：<br>
