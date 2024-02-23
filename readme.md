@@ -56,7 +56,7 @@ cd pharos
 mvn clean install
 ```
 4. 运行项目<br>
-<b>先根据自己的环境修改配置文件中的数据库地址，邮箱信息等，然后创建pharos数据库，执行项目sql文件夹中的sql语句<br>
+<b>先根据自己的环境修改配置文件中的数据库地址，邮箱信息等，然后创建pharos数据库，执行项目sql文件夹中的sql语句，默认管理后台登录用户名：admin 密码：123456<br>
    </b></br>
 如果是Spring Boot项目，您可以使用Maven插件来运行
 ```java
