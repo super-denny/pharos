@@ -51,10 +51,14 @@ cd pharos
 mvn clean install
 ```
 4. 运行项目<br>
-先根据自己的环境修改配置文件中的数据库地址，然后创建pharos数据库后执行sql文件夹中的sql语句<br>
-   如果是Spring Boot项目，您可以使用Maven插件来运行
+<b>先根据自己的环境修改配置文件中的数据库地址，邮箱信息等，然后创建pharos数据库，执行项目sql文件夹中的sql语句<br>
+   </b></br>
+如果是Spring Boot项目，您可以使用Maven插件来运行
 ```java
 mvn spring-boot:run
 ```
 如果您使用IDE（如IntelliJ IDEA或Eclipse），则可以直接在IDE中运行主类
 
+####  开源协议
+
+Pharos 遵循 [MIT 协议](https://github.com/super-denny/pharos/blob/master/LICENSE)。
